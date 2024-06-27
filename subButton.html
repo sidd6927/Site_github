@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webhook Form</title>
+</head>
+<body>
+    <h1>Webhook Form</h1>
+    <form id="webhookForm">
+        <label for="field1">Product Name:</label>
+        <input type="text" id="field1" name="field1" required><br><br>
+        <button type="submit">Submit</button>
+    </form>
+
+    <div id="response" style="margin-top: 20px;"></div>
+    <div id="postUrl" style="margin-top: 20px;"></div>
+    <div id="successMessage" style="display: none; margin-top: 20px;">
+        <p>Form submitted successfully!</p>
+        <button id="navigateButton">Navigate to Another Page</button>
+    </div>
+
+    <script>
+        document.getElementById('webhookForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const formData = {
+                field1: document.getElementById('field1').value
+            };
+
+            const url = `https://smbproducts.azurewebsites.net/api/http_trigger?name=${encodeURIComponent(formData.field1)}`;
+            window.location.href = url;
+            // Display the POST URL
+            document.getElementById('postUrl').innerText = 'POST URL: ' + url;
+
+            try {
+                // Perform the fetch request (asynchronous POST)
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to submit form');
+                }
+
+                const result = await response.json();
+                document.getElementById('response').innerText = 'Success: ' + JSON.stringify(result, null, 2);
+
+                // Show success message and navigation button
+                document.getElementById('successMessage').style.display = 'block';
+
+                // Handle navigation button click
+                document.getElementById('navigateButton').addEventListener('click', function() {
+                    // Replace with the URL you want to navigate to
+                    window.location.href = url; // Replace with your desired URL
+                });
+            } catch (error) {
+                document.getElementById('response').innerText = 'Error: ' + error.message;
+            }
+        });
+    </script>
+</body>
+</html>

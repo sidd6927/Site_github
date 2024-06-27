@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webhook Form</title>
+    <style>
+        
+        .content {
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+        }
+        .banner {
+            background-color: rgba(0, 152, 70, 255);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            width: 100%;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 class="banner">Alzico Product Updates</h1>
+    <div class="content">
+    <form id="webhookForm">
+        <label for="field1">Product Name:</label>
+        <input type="text" id="field1" name="field1" required><br><br>
+        <label for="field2">Benefits:</label>
+        <input type="text" id="field2" name="field1" required><br><br>
+        <label for="field3">Offer Details</label>
+        <input type="text" id="field3" name="field1" required><br><br>
+        <label for="field4">Image URL:</label>
+        <input type="text" id="field4" name="field1" required><br><br>
+        <label for="field5">Product Category</label>
+        <input type="text" id="field5" name="field1" required><br><br>
+        <button type="submit">Submit</button>
+    </form>
+    </div>
+    <div id="response" style="margin-top: 20px;"></div>
+    <div id="postUrl" style="margin-top: 20px;"></div>
+ 
+    <script>
+        document.getElementById('webhookForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const formData = {
+                field1: document.getElementById('field1').value
+            };
+ 
+            const url = `https://smbproducts.azurewebsites.net/api/http_trigger?name=${encodeURIComponent(formData.field1)}&benefits=${encodeURIComponent(formData.field2)}&offerDetails=${encodeURIComponent(formData.field3)}&imageUrl=${encodeURIComponent(formData.field4)}&productCategory=${encodeURIComponent(formData.field5)}`;
+
+            // Display the POST URL
+            // document.getElementById('postUrl').innerText = 'POST URL: ' + url;
+            window.location.href = url;
+        
+        });
+    </script>
+</body>
+</html>
